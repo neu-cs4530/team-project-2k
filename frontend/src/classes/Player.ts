@@ -9,14 +9,21 @@ export default class Player {
 
   public label?: Phaser.GameObjects.Text;
 
-  // defines the players textbox
-  public _textbox: Array<string>;
+  public textbox?: Phaser.GameObjects.Text;
+  
+  private readonly _currentSong: string;
 
-  constructor(id: string, userName: string, location: UserLocation, textbox: Array<string>) {
+  private readonly _selectedPlaylist: string;
+
+  private readonly _spotifyUsername: string;
+
+  constructor(id: string, userName: string, location: UserLocation, currentSong: string, selectedPlaylist: string, spotifyUsername: string) {
     this._id = id;
     this._userName = userName;
     this.location = location;
-    this._textbox = textbox;
+    this._currentSong = currentSong;
+    this._selectedPlaylist = selectedPlaylist;
+    this._spotifyUsername = spotifyUsername;
   }
 
   get userName(): string {
@@ -27,16 +34,30 @@ export default class Player {
     return this._id;
   }
 
-  // Gets the players textbox
-  get textbox(): Array<string> {
-    return this._textbox;
+  get currentSong(): string {
+    return this._currentSong;
   }
 
+  get selectedPlaylist(): string {
+    return this._selectedPlaylist;
+  }
+
+  get spotifyUsername(): string {
+    return this._spotifyUsername;
+  }
+
+
   static fromServerPlayer(playerFromServer: ServerPlayer): Player {
-    return new Player(playerFromServer._id, playerFromServer._userName, playerFromServer.location);
+    return new Player(playerFromServer._id, playerFromServer._userName, playerFromServer.location, 
+      playerFromServer._currentSong, playerFromServer._selectedPlaylist, playerFromServer._spotifyUsername);
   }
 }
-export type ServerPlayer = { _id: string, _userName: string, location: UserLocation };
+export type ServerPlayer = { _id: string, 
+                              _userName: string,
+                              location: UserLocation, 
+                              _currentSong: string,
+                              _selectedPlaylist: string,
+                              _spotifyUsername: string };
 
 export type Direction = 'front'|'back'|'left'|'right';
 
@@ -47,3 +68,9 @@ export type UserLocation = {
   moving: boolean,
   conversationLabel?: string
 };
+
+export type SpotifyData = {
+  currentSong: string;
+  selectedPlaylist: string;
+  spotifyUsername: string;
+}
