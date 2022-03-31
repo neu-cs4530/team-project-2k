@@ -9,10 +9,14 @@ export default class Player {
 
   public label?: Phaser.GameObjects.Text;
 
-  constructor(id: string, userName: string, location: UserLocation) {
+  // defines the players textbox
+  public _textbox: Array<string>;
+
+  constructor(id: string, userName: string, location: UserLocation, textbox: Array<string>) {
     this._id = id;
     this._userName = userName;
     this.location = location;
+    this._textbox = textbox;
   }
 
   get userName(): string {
@@ -21,6 +25,11 @@ export default class Player {
 
   get id(): string {
     return this._id;
+  }
+
+  // Gets the players textbox
+  get textbox(): Array<string> {
+    return this._textbox;
   }
 
   static fromServerPlayer(playerFromServer: ServerPlayer): Player {
