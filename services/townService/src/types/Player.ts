@@ -15,6 +15,15 @@ export default class Player {
   /** The player's username, which is not guaranteed to be unique within the town * */
   private readonly _userName: string;
 
+  /** The player's currently playing song, which is not guaranteed to exist * */
+  private _currentSong?: string;
+
+  /** The player's selected playlist, which is not guaranteed to exist * */
+  private _selectedPlaylist?: string;
+
+  /** The player's spotify username, wihch only exists if player -> associated with spotify * */
+  private _spotifyUsername?: string;
+
   /** The current ConversationArea that the player is in, or undefined if they are not located within one */
   private _activeConversationArea?: ServerConversationArea;
 
@@ -36,9 +45,32 @@ export default class Player {
   get id(): string {
     return this._id;
   }
+  get currentSong(): string | undefined {
+    return this._currentSong;
+  }
+
+  get selectedPlaylist(): string | undefined {
+    return this._selectedPlaylist;
+  }
+
+  get spotifyUsername(): string | undefined {
+    return this._spotifyUsername;
+  }
 
   get activeConversationArea(): ServerConversationArea | undefined {
     return this._activeConversationArea;
+  }
+
+  set currentSong(song: string | undefined) {
+    this._currentSong = song;
+  }
+
+  set selectedPlaylist(selectedPlaylist: string | undefined) {
+    this._selectedPlaylist = selectedPlaylist;
+  }
+
+  set spotifyUsername(userName: string | undefined) {
+    this._spotifyUsername = userName;
   }
 
   set activeConversationArea(conversationArea: ServerConversationArea | undefined) {
