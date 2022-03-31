@@ -200,12 +200,18 @@ class CoveyGameScene extends Phaser.Scene {
           color: '#000000',
           backgroundColor: '#ffffff',
         });
-        const textbox = this.add.text(0, 0, 'otherPlayer', {
-          font: '18px monospace',
-          color: '#000000',
-          // padding: {x: 20, y: 10},
-          backgroundColor: '#ffffff',
-        });
+        if (myPlayer) {
+          this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
+        }
+        let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+        if (this.spotifyData !== undefined) {
+          textbox = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+            font: '18px monospace',
+            color: '#000000',
+            // padding: {x: 20, y: 10},
+            backgroundColor: '#ffffff',
+          });
+        }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
         myPlayer.textbox = textbox;
@@ -492,10 +498,10 @@ class CoveyGameScene extends Phaser.Scene {
     let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
     const myPlayer = this.players.find(player => player.id === this.myPlayerID);
     if (myPlayer) {
-      this.spotifyData = { currentSong : 'test', selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
+      this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
     }
     if (this.spotifyData !== undefined) {
-      textbox = this.add.text(spawnPoint.x, spawnPoint.y - 40, this.spotifyData.currentSong, {
+      textbox = this.add.text(spawnPoint.x, spawnPoint.y - 80, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
         font: '18px monospace',
         color: '#000000',
         // padding: {x: 20, y: 10},
