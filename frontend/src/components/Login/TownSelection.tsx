@@ -58,12 +58,9 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   })
 
   function getAccessToken(hash: string): string | null {
-    const result = new URLSearchParams(
+    return new URLSearchParams(
       hash.substring(1)
     ).get("access_token")
-    window.location.hash = '';
-
-    return result;
   }
 
   const accessToken = window.location.hash !== '' ? getAccessToken(window.location.hash) : null;
