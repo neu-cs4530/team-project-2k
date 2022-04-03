@@ -65,6 +65,17 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
 
   const accessToken = window.location.hash !== '' ? getAccessToken(window.location.hash) : null;
 
+  const [spotifyUsername, setSpotifyUsername] = useState('');
+  
+  const getSpotifyUsername = useCallback(async () => {
+    if (accessToken) {
+      const result = await new SpotifyWebApi({
+        accessToken
+      }).users.getMe()
+      setSpotifyUsername(result.id);
+    }
+  }, [accessToken]);
+
   const updateTownListings = useCallback(() => {
     // console.log(apiClient);
     apiClient.listTowns()
@@ -76,11 +87,12 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   }, [setCurrentPublicTowns, apiClient]);
   useEffect(() => {
     updateTownListings();
+    getSpotifyUsername();
     const timer = setInterval(updateTownListings, 2000);
     return () => {
       clearInterval(timer)
     };
-  }, [updateTownListings]);
+  }, [getSpotifyUsername, updateTownListings]);
 
   const handleJoin = useCallback(async (coveyRoomID: string) => {
     try {
@@ -114,7 +126,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         status: 'error'
       })
     }
-  }, [doLogin, userName, videoConnect, toast]);
+  }, [userName, accessToken, doLogin, toast, videoConnect]);
 
   const handleCreate = async () => {
     if (!userName || userName.length === 0) {
@@ -169,13 +181,14 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         <Stack>
           <Box p="4" borderWidth="1px" borderRadius="lg">
             <Heading as="h2" size="lg">Connect to a Spotify Account</Heading>
-            <Link href={spotifyAuthURL}>
-              <Button data-testid="spotifyLoginButton">Login to Spotify Account</Button>
-            </Link>
+            {accessToken ? 
+              <Box>Connected to Spotify Account: {spotifyUsername}</Box> : 
+              <Link href={spotifyAuthURL}>
+                <Button data-testid="spotifyLoginButton">Login to Spotify Account</Button>
+              </Link>}
           </Box>
           <Box p="4" borderWidth="1px" borderRadius="lg">
             <Heading as="h2" size="lg">Select a username</Heading>
-
             <FormControl>
               <FormLabel htmlFor="name">Name</FormLabel>
               <Input autoFocus name="name" placeholder="Your name"
