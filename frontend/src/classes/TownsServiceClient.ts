@@ -36,8 +36,6 @@ export interface TownJoinResponse {
   isPubliclyListed: boolean;
   /** Names and occupants of any existing ConversationAreas */
   conversationAreas: ServerConversationArea[];
-  /** Authorization token for Spotify API */
-  spotifyToken: string | undefined;
 }
 
 /**
