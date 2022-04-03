@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import assert from "assert";
 import {
   Box,
@@ -42,11 +42,11 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   const { connect: videoConnect } = useVideoContext();
   const { apiClient } = useCoveyAppState();
   const toast = useToast();
-  const spotifyWebApi = new SpotifyWebApi({
+  const spotifyWebApi = useMemo(() => new SpotifyWebApi({
     clientId: SPOTIFY_CLIENT_ID,
     clientSecret: SPOTIFY_CLIENT_SECRET,
     redirectUri: `${window.location.protocol}//${window.location.host}/`,
-  });
+  }), []);
   const spotifyAuthURL = spotifyWebApi.getTemporaryAuthorizationUrl({
     scope: [
       'user-read-playback-state',
@@ -69,12 +69,11 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   
   const getSpotifyUsername = useCallback(async () => {
     if (accessToken) {
-      const result = await new SpotifyWebApi({
-        accessToken
-      }).users.getMe()
+      spotifyWebApi.setAccessToken(accessToken);
+      const result = await spotifyWebApi.users.getMe()
       setSpotifyUsername(result.id);
     }
-  }, [accessToken]);
+  }, [accessToken, spotifyWebApi]);
 
   const updateTownListings = useCallback(() => {
     // console.log(apiClient);
