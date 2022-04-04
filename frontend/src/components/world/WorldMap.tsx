@@ -150,7 +150,7 @@ class CoveyGameScene extends Phaser.Scene {
     }
     players.forEach(p => {
       this.updatePlayerLocation(p);
-      this.spotifyData = { currentSong : p.currentSong, selectedPlaylist : p.selectedPlaylist, spotifyUsername : p.spotifyUsername };
+      this.spotifyData = { currentSong : p.currentSong || "None", selectedPlaylist : p.selectedPlaylist || "None", spotifyUsername : p.spotifyUsername || "None" };
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -184,7 +184,7 @@ class CoveyGameScene extends Phaser.Scene {
       }
       myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.selectedPlaylist, player.spotifyUsername);
       this.players.push(myPlayer);
-      this.spotifyData = { currentSong : player.currentSong, selectedPlaylist : player.selectedPlaylist, spotifyUsername : player.spotifyUsername };
+      this.spotifyData = { currentSong : player.currentSong || "None", selectedPlaylist : player.selectedPlaylist || "None", spotifyUsername : player.spotifyUsername || "None" };
     }
     if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
       let { sprite } = myPlayer;
@@ -201,7 +201,7 @@ class CoveyGameScene extends Phaser.Scene {
           backgroundColor: '#ffffff',
         });
         if (myPlayer) {
-          this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
+          this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
         }
         let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
         if (this.spotifyData !== undefined) {
@@ -498,7 +498,7 @@ class CoveyGameScene extends Phaser.Scene {
     let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
     const myPlayer = this.players.find(player => player.id === this.myPlayerID);
     if (myPlayer) {
-      this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
+      this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
     }
     if (this.spotifyData !== undefined) {
       textbox = this.add.text(spawnPoint.x, spawnPoint.y, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
