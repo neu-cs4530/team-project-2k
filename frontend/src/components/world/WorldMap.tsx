@@ -297,10 +297,10 @@ class CoveyGameScene extends Phaser.Scene {
       this.player.sprite.body.velocity.normalize().scale(speed);
 
       const isMoving = primaryDirection !== undefined;
-      this.player.label.setX(body.x);
+      this.player.label.setX(body.x - this.player.label.frame.centerX / 2);
       this.player.label.setY(body.y - 20);
-      this.player.textbox.setX(body.x);
-      this.player.textbox.setY(body.y - 40);
+      this.player.textbox.setX(body.x - this.player.textbox.frame.centerX / 2);
+      this.player.textbox.setY(body.y - 80);
       if (
         !this.lastLocation ||
         this.lastLocation.x !== body.x ||
@@ -501,7 +501,7 @@ class CoveyGameScene extends Phaser.Scene {
       this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
     }
     if (this.spotifyData !== undefined) {
-      textbox = this.add.text(spawnPoint.x, spawnPoint.y - 80, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+      textbox = this.add.text(spawnPoint.x, spawnPoint.y - 20, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
         font: '18px monospace',
         color: '#000000',
         // padding: {x: 20, y: 10},
