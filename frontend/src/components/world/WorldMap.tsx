@@ -219,10 +219,10 @@ class CoveyGameScene extends Phaser.Scene {
       if (!sprite.anims) return;
       sprite.setX(player.location.x);
       sprite.setY(player.location.y);
-      myPlayer.label?.setX(player.location.x);
+      myPlayer.label?.setX(player.location.x - myPlayer.label.frame.centerX / 2);
       myPlayer.label?.setY(player.location.y - 20);
-      myPlayer.textbox?.setX(player.location.x);
-      myPlayer.textbox?.setY(player.location.y - 40);
+      myPlayer.textbox?.setX(player.location.x - myPlayer.textbox.frame.centerX / 2);
+      myPlayer.textbox?.setY(player.location.y - 80);
       if (player.location.moving) {
         sprite.anims.play(`misa-${player.location.rotation}-walk`, true);
       } else {
@@ -501,7 +501,7 @@ class CoveyGameScene extends Phaser.Scene {
       this.spotifyData = { currentSong : myPlayer.currentSong, selectedPlaylist : myPlayer.selectedPlaylist, spotifyUsername : myPlayer.spotifyUsername };
     }
     if (this.spotifyData !== undefined) {
-      textbox = this.add.text(spawnPoint.x, spawnPoint.y - 20, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+      textbox = this.add.text(spawnPoint.x, spawnPoint.y, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
         font: '18px monospace',
         color: '#000000',
         // padding: {x: 20, y: 10},
