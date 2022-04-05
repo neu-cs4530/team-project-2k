@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import React, { useEffect, useMemo, useState } from 'react';
 import BoundingBox from '../../classes/BoundingBox';
 import ConversationArea from '../../classes/ConversationArea';
-import Player, { ServerPlayer, UserLocation } from '../../classes/Player';
+import Player, { ServerPlayer, UserLocation, SpotifyData } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useConversationAreas from '../../hooks/useConversationAreas';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
@@ -27,6 +27,7 @@ class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     label: Phaser.GameObjects.Text;
+    textbox: Phaser.GameObjects.Text;
   };
 
   private myPlayerID: string;
@@ -45,6 +46,8 @@ class CoveyGameScene extends Phaser.Scene {
   private previouslyCapturedKeys: number[] = [];
 
   private lastLocation?: UserLocation;
+
+  private spotifyData?: SpotifyData;
 
   private ready = false;
 
@@ -147,6 +150,7 @@ class CoveyGameScene extends Phaser.Scene {
     }
     players.forEach(p => {
       this.updatePlayerLocation(p);
+      this.spotifyData = { currentSong : p.currentSong || "None", selectedPlaylist : p.selectedPlaylist || "None", spotifyUsername : p.spotifyUsername || "None" };
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -178,8 +182,9 @@ class CoveyGameScene extends Phaser.Scene {
           y: 0,
         };
       }
-      myPlayer = new Player(player.id, player.userName, location);
+      myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.selectedPlaylist, player.spotifyUsername);
       this.players.push(myPlayer);
+      this.spotifyData = { currentSong : player.currentSong || "None", selectedPlaylist : player.selectedPlaylist || "None", spotifyUsername : player.spotifyUsername || "None" };
     }
     if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
       let { sprite } = myPlayer;
@@ -195,14 +200,29 @@ class CoveyGameScene extends Phaser.Scene {
           color: '#000000',
           backgroundColor: '#ffffff',
         });
+        if (myPlayer) {
+          this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+        }
+        let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+        if (this.spotifyData !== undefined) {
+          textbox = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+            font: '18px monospace',
+            color: '#000000',
+            // padding: {x: 20, y: 10},
+            backgroundColor: '#ffffff',
+          });
+        }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
+        myPlayer.textbox = textbox;
       }
       if (!sprite.anims) return;
       sprite.setX(player.location.x);
       sprite.setY(player.location.y);
-      myPlayer.label?.setX(player.location.x);
+      myPlayer.label?.setX(player.location.x - myPlayer.label.frame.centerX / 2);
       myPlayer.label?.setY(player.location.y - 20);
+      myPlayer.textbox?.setX(player.location.x - myPlayer.textbox.frame.centerX / 2);
+      myPlayer.textbox?.setY(player.location.y - 80);
       if (player.location.moving) {
         sprite.anims.play(`misa-${player.location.rotation}-walk`, true);
       } else {
@@ -277,8 +297,10 @@ class CoveyGameScene extends Phaser.Scene {
       this.player.sprite.body.velocity.normalize().scale(speed);
 
       const isMoving = primaryDirection !== undefined;
-      this.player.label.setX(body.x);
+      this.player.label.setX(body.x - this.player.label.frame.centerX / 2);
       this.player.label.setY(body.y - 20);
+      this.player.textbox.setX(body.x - this.player.textbox.frame.centerX / 2);
+      this.player.textbox.setY(body.y - 80);
       if (
         !this.lastLocation ||
         this.lastLocation.x !== body.x ||
@@ -473,10 +495,25 @@ class CoveyGameScene extends Phaser.Scene {
       // padding: {x: 20, y: 10},
       backgroundColor: '#ffffff',
     });
+    let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+    const myPlayer = this.players.find(player => player.id === this.myPlayerID);
+    if (myPlayer) {
+      this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+    }
+    if (this.spotifyData !== undefined) {
+      textbox = this.add.text(spawnPoint.x, spawnPoint.y, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+        font: '18px monospace',
+        color: '#000000',
+        // padding: {x: 20, y: 10},
+        backgroundColor: '#ffffff',
+      });
+    }
     this.player = {
       sprite,
       label,
+      textbox,
     };
+    
 
     /* Configure physics overlap behavior for when the player steps into
     a transporter area. If you enter a transporter and press 'space', you'll
