@@ -27,7 +27,10 @@ export default class Player {
   /** The current ConversationArea that the player is in, or undefined if they are not located within one */
   private _activeConversationArea?: ServerConversationArea;
 
-  constructor(userName: string) {
+  /** Spotify AUTH Token for the current player that is joining */
+  private _spotifyToken: string | null;
+
+  constructor(userName: string, spotifyToken?: string | null) {
     this.location = {
       x: 0,
       y: 0,
@@ -35,6 +38,8 @@ export default class Player {
       rotation: 'front',
     };
     this._userName = userName;
+    
+    this._spotifyToken = spotifyToken || null;
     this._id = nanoid();
   }
 
@@ -45,32 +50,33 @@ export default class Player {
   get id(): string {
     return this._id;
   }
+
   get currentSong(): string | undefined {
     return this._currentSong;
-  }
-
-  get selectedPlaylist(): string | undefined {
-    return this._selectedPlaylist;
-  }
-
-  get spotifyUsername(): string | undefined {
-    return this._spotifyUsername;
-  }
-
-  get activeConversationArea(): ServerConversationArea | undefined {
-    return this._activeConversationArea;
   }
 
   set currentSong(song: string | undefined) {
     this._currentSong = song;
   }
 
+  get selectedPlaylist(): string | undefined {
+    return this._selectedPlaylist;
+  }
+
   set selectedPlaylist(selectedPlaylist: string | undefined) {
     this._selectedPlaylist = selectedPlaylist;
   }
 
+  get spotifyUsername(): string | undefined {
+    return this._spotifyUsername;
+  }
+
   set spotifyUsername(userName: string | undefined) {
     this._spotifyUsername = userName;
+  }
+
+  get activeConversationArea(): ServerConversationArea | undefined {
+    return this._activeConversationArea;
   }
 
   set activeConversationArea(conversationArea: ServerConversationArea | undefined) {

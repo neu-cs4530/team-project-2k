@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import assert from "assert";
 import {
   Box,
@@ -9,6 +9,7 @@ import {
   FormLabel,
   Heading,
   Input,
+  Link,
   Stack,
   Table,
   TableCaption,
@@ -19,6 +20,7 @@ import {
   Tr,
   useToast
 } from '@chakra-ui/react';
+import { SpotifyWebApi } from 'spotify-web-api-ts';
 import useVideoContext from '../VideoCall/VideoFrontend/hooks/useVideoContext/useVideoContext';
 import Video from '../../classes/Video/Video';
 import { CoveyTownInfo, TownJoinResponse, } from '../../classes/TownsServiceClient';
@@ -27,6 +29,9 @@ import useCoveyAppState from '../../hooks/useCoveyAppState';
 interface TownSelectionProps {
   doLogin: (initData: TownJoinResponse) => Promise<boolean>
 }
+
+const SPOTIFY_CLIENT_ID = '71d946d5d13349db9063105e20368086'
+const { SPOTIFY_CLIENT_SECRET } = process.env;
 
 export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Element {
   const [userName, setUserName] = useState<string>(Video.instance()?.userName || '');
@@ -37,6 +42,38 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   const { connect: videoConnect } = useVideoContext();
   const { apiClient } = useCoveyAppState();
   const toast = useToast();
+  const spotifyWebApi = useMemo(() => new SpotifyWebApi({
+    clientId: SPOTIFY_CLIENT_ID,
+    clientSecret: SPOTIFY_CLIENT_SECRET,
+    redirectUri: `${window.location.protocol}//${window.location.host}/`,
+  }), []);
+  const spotifyAuthURL = spotifyWebApi.getTemporaryAuthorizationUrl({
+    scope: [
+      'user-read-playback-state',
+      'user-read-currently-playing',
+      'user-read-private',
+      'playlist-read-private',
+      'playlist-read-collaborative',
+      ]
+  })
+
+  function getAccessToken(hash: string): string | null {
+    return new URLSearchParams(
+      hash.substring(1)
+    ).get("access_token")
+  }
+
+  const accessToken = window.location.hash !== '' ? getAccessToken(window.location.hash) : null;
+
+  const [spotifyUsername, setSpotifyUsername] = useState('');
+  
+  const getSpotifyUsername = useCallback(async () => {
+    if (accessToken) {
+      spotifyWebApi.setAccessToken(accessToken);
+      const result = await spotifyWebApi.users.getMe()
+      setSpotifyUsername(result.id);
+    }
+  }, [accessToken, spotifyWebApi]);
 
   const updateTownListings = useCallback(() => {
     // console.log(apiClient);
@@ -49,11 +86,12 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   }, [setCurrentPublicTowns, apiClient]);
   useEffect(() => {
     updateTownListings();
+    getSpotifyUsername();
     const timer = setInterval(updateTownListings, 2000);
     return () => {
       clearInterval(timer)
     };
-  }, [updateTownListings]);
+  }, [getSpotifyUsername, updateTownListings]);
 
   const handleJoin = useCallback(async (coveyRoomID: string) => {
     try {
@@ -73,7 +111,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         });
         return;
       }
-      const initData = await Video.setup(userName, coveyRoomID);
+      const initData = await Video.setup(userName, coveyRoomID, accessToken);
 
       const loggedIn = await doLogin(initData);
       if (loggedIn) {
@@ -87,7 +125,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         status: 'error'
       })
     }
-  }, [doLogin, userName, videoConnect, toast]);
+  }, [userName, accessToken, doLogin, toast, videoConnect]);
 
   const handleCreate = async () => {
     if (!userName || userName.length === 0) {
@@ -141,8 +179,15 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
       <form>
         <Stack>
           <Box p="4" borderWidth="1px" borderRadius="lg">
+            <Heading as="h2" size="lg">Connect to a Spotify Account</Heading>
+            {accessToken ? 
+              <Box>Connected to Spotify Account: {spotifyUsername}</Box> : 
+              <Link href={spotifyAuthURL}>
+                <Button data-testid="spotifyLoginButton">Login to Spotify Account</Button>
+              </Link>}
+          </Box>
+          <Box p="4" borderWidth="1px" borderRadius="lg">
             <Heading as="h2" size="lg">Select a username</Heading>
-
             <FormControl>
               <FormLabel htmlFor="name">Name</FormLabel>
               <Input autoFocus name="name" placeholder="Your name"
