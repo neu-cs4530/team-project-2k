@@ -46,8 +46,6 @@ The backend will automatically restart if you change any of the files in the `se
 
 Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWNS_SERVICE_URL=http://localhost:8081` (if you deploy the towns service to another location, put that location here instead)
 
-Also add a line: `SPOTIFY_CLIENT_SECRET=<client_secret>`. Ask the owner (Pavan Hirpara) of the Spotify Application for access to the secret
-
 ### Running the frontend
 
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
