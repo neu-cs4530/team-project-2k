@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import '@testing-library/jest-dom';
 import { findAllByRole, render, RenderResult, waitFor } from '@testing-library/react';
 import { nanoid } from 'nanoid';
+import { NONE } from 'phaser';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import BoundingBox from '../../classes/BoundingBox';
@@ -131,6 +132,9 @@ describe('ConversationAreasList', () => {
               rotation: 'front',
               moving: false,
             },
+            '',
+            '',
+            ''
           ),
         );
       }
