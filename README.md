@@ -29,12 +29,13 @@ To create an account and configure your local environment:
 2. Create an API key and secret (select "API Keys" on the left under "Settings")
 3. Create a `.env` file in the `services/townService` directory, setting the values as follows:
 
-| Config Value            | Description                               |
-| ----------------------- | ----------------------------------------- |
-| `TWILIO_ACCOUNT_SID`    | Visible on your twilio account dashboard. |
-| `TWILIO_API_KEY_SID`    | The SID of the new API key you created.   |
-| `TWILIO_API_KEY_SECRET` | The secret for the API key you created.   |
-| `TWILIO_API_AUTH_TOKEN` | Visible on your twilio account dashboard. |
+| Config Value            | Description                                                  |
+| ----------------------- | ------------------------------------------------------------ |
+| `TWILIO_ACCOUNT_SID`    | Visible on your twilio account dashboard.                    |
+| `TWILIO_API_KEY_SID`    | The SID of the new API key you created.                      |
+| `TWILIO_API_KEY_SECRET` | The secret for the API key you created.                      |
+| `TWILIO_API_AUTH_TOKEN` | Visible on your twilio account dashboard.                    |
+| `SPOTIFY_CLIENT_SECRET` | Unique to our Spotify application (ask for access to secret) |
 
 ### Starting the backend
 
@@ -44,6 +45,8 @@ The backend will automatically restart if you change any of the files in the `se
 ### Configuring the frontend
 
 Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWNS_SERVICE_URL=http://localhost:8081` (if you deploy the towns service to another location, put that location here instead)
+
+Also add a line: `SPOTIFY_CLIENT_SECRET=<client_secret>`. Ask the owner (Pavan Hirpara) of the Spotify Application for access to the secret
 
 ### Running the frontend
 
