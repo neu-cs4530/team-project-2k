@@ -30,7 +30,7 @@ interface TownSelectionProps {
   doLogin: (initData: TownJoinResponse) => Promise<boolean>
 }
 
-const SPOTIFY_CLIENT_ID = '71d946d5d13349db9063105e20368086'
+const SPOTIFY_CLIENT_ID = '71d946d5d13349db9063105e20368086';
 const { SPOTIFY_CLIENT_SECRET } = process.env;
 
 export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Element {
@@ -70,7 +70,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   const getSpotifyUsername = useCallback(async () => {
     if (accessToken) {
       spotifyWebApi.setAccessToken(accessToken);
-      const result = await spotifyWebApi.users.getMe()
+      const result = await spotifyWebApi.users.getMe();
       setSpotifyUsername(result.id);
     }
   }, [accessToken, spotifyWebApi]);

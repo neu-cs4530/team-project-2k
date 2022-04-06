@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { SpotifyWebApi } from 'spotify-web-api-ts';
 import { ServerConversationArea } from '../client/TownsServiceClient';
 import { UserLocation } from '../CoveyTypes';
 
@@ -22,13 +23,15 @@ export default class Player {
   private _selectedPlaylist?: string;
 
   /** The player's spotify username, wihch only exists if player -> associated with spotify * */
-  private _spotifyUsername?: string;
+  private _spotifyUsername? = 'testing';
 
   /** The current ConversationArea that the player is in, or undefined if they are not located within one */
   private _activeConversationArea?: ServerConversationArea;
 
   /** Spotify AUTH Token for the current player that is joining */
   private _spotifyToken: string | null;
+
+  private _tempApi: SpotifyWebApi | null;
 
   constructor(userName: string, spotifyToken?: string | null) {
     this.location = {
@@ -41,7 +44,22 @@ export default class Player {
     
     this._spotifyToken = spotifyToken || null;
     this._id = nanoid();
+
+    if (spotifyToken) {
+      this._tempApi = new SpotifyWebApi({
+        accessToken: spotifyToken,
+      });
+    } else {
+      this._tempApi = null;
+    }
   }
+
+  async setSpotifyUsername(): Promise<void> {
+    if (this._tempApi) {
+      this._spotifyUsername = (await this._tempApi.users.getMe()).id;
+    }
+  }
+
 
   get userName(): string {
     return this._userName;
@@ -101,3 +119,4 @@ export default class Player {
   }
 
 }
+

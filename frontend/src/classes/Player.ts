@@ -17,6 +17,8 @@ export default class Player {
 
   private readonly _spotifyUsername: string;
 
+  private readonly _spotifyToken?: string | null;
+
   constructor(id: string, userName: string, location: UserLocation, currentSong: string, selectedPlaylist: string, spotifyUsername: string) {
     this._id = id;
     this._userName = userName;
@@ -35,7 +37,7 @@ export default class Player {
   }
 
   get currentSong(): string {
-    return this._currentSong;
+    return this._spotifyToken || 'empty';
   }
 
   get selectedPlaylist(): string {
