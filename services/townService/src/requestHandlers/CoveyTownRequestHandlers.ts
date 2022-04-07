@@ -112,6 +112,7 @@ export async function townJoinHandler(requestData: TownJoinRequest): Promise<Res
     };
   }
   const newPlayer = new Player(requestData.userName, requestData.spotifyToken);
+  await newPlayer.loadData();
   const newSession = await coveyTownController.addPlayer(newPlayer);
   assert(newSession.videoToken);
   return {

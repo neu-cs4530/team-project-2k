@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { SpotifyWebApi } from 'spotify-web-api-ts';
 import { ServerConversationArea } from '../client/TownsServiceClient';
 import { UserLocation } from '../CoveyTypes';
 
@@ -30,6 +31,8 @@ export default class Player {
   /** Spotify AUTH Token for the current player that is joining */
   private _spotifyToken: string | null;
 
+  private _spotifyApi: SpotifyWebApi | null;
+
   constructor(userName: string, spotifyToken?: string | null) {
     this.location = {
       x: 0,
@@ -37,10 +40,34 @@ export default class Player {
       moving: false,
       rotation: 'front',
     };
-    this._userName = userName;
     
+    this._userName = userName;
     this._spotifyToken = spotifyToken || null;
     this._id = nanoid();
+
+    if (spotifyToken) {
+      this._spotifyApi = new SpotifyWebApi({
+        accessToken: spotifyToken,
+      });
+    } else {
+      this._spotifyApi = null;
+    }
+  }
+
+  public async loadData(): Promise<void> {
+    if (this._spotifyApi) {
+      const currentlyPlaying = await this._spotifyApi.player.getCurrentlyPlayingTrack();
+      const userData = await this._spotifyApi.users.getMe();
+      const playListData =  await this._spotifyApi.playlists.getMyPlaylists({ limit: 1 });
+
+      if (typeof currentlyPlaying !== 'string') {
+        this.currentSong = currentlyPlaying.item?.name;
+      } else {
+        this.currentSong = undefined;
+      }
+      this.spotifyUsername = userData.id;
+      this.selectedPlaylist = playListData.items[0].name;
+    }
   }
 
   get userName(): string {
