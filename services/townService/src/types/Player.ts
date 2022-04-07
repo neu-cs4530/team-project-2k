@@ -49,7 +49,6 @@ export default class Player {
       this._spotifyApi = new SpotifyWebApi({
         accessToken: spotifyToken,
       });
-      this.loadData();
     } else {
       this._spotifyApi = null;
     }
