@@ -117,3 +117,6 @@ ngrok.yml
 
 # Local Netlify folder
 .netlify
+
+# Hidden mac files
+*.DS_Store

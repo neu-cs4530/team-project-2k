@@ -75,7 +75,7 @@ describe('PlayersInTownList', () => {
         new Player(
           `testingPlayerID${i}-${nanoid()}`,
           `testingPlayerUser${i}-${nanoid()}}`,
-          randomLocation(),
+          randomLocation(), '','',''
         ),
       );
     }
@@ -135,7 +135,7 @@ describe('PlayersInTownList', () => {
     await expectProperlyRenderedPlayersList(renderData, players);
     for (let i = 0; i < players.length; i += 1) {
       const newPlayers = players.concat([
-        new Player(`testingPlayerID-${i}.new`, `testingPlayerUser${i}.new`, randomLocation()),
+        new Player(`testingPlayerID-${i}.new`, `testingPlayerUser${i}.new`, randomLocation(),'','',''),
       ]);
       usePlayersInTownSpy.mockReturnValue(newPlayers);
       renderData.rerender(wrappedPlayersListComponent());
