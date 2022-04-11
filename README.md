@@ -20,6 +20,10 @@ A backend service (in the `services/townService` directory) implements the appli
 
 Running the application locally entails running both the backend service and a frontend.
 
+### Getting access to the Spotify API
+
+In order to make API calls after logging into your Spotify user, the Spotify Web API requires you to register your account with the Spotify X Covey Town App. To do this, send the owner of the Web API app (Pavan Hirpara) the email associated with your Spotify account. Then, access to the API can be granted and you can log into the Covey Town app with your Spotify user.
+
 ### Setting up the backend
 
 To run the backend, you will need a Twilio account. Twilio provides new accounts with $15 of credit, which is more than enough to get started.
@@ -35,7 +39,6 @@ To create an account and configure your local environment:
 | `TWILIO_API_KEY_SID`    | The SID of the new API key you created.                      |
 | `TWILIO_API_KEY_SECRET` | The secret for the API key you created.                      |
 | `TWILIO_API_AUTH_TOKEN` | Visible on your twilio account dashboard.                    |
-| `SPOTIFY_CLIENT_SECRET` | Unique to our Spotify application (ask for access to secret) |
 
 ### Starting the backend
 
@@ -45,6 +48,8 @@ The backend will automatically restart if you change any of the files in the `se
 ### Configuring the frontend
 
 Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWNS_SERVICE_URL=http://localhost:8081` (if you deploy the towns service to another location, put that location here instead)
+
+You will also need to add the line: `SPOTIFY_CLIENT_SECRET=<secret>`. `The SPOTIFY_CLIENT_SECRET` is a unique secret to our Spotify Web API app and must be included to gain access to the Spotify API. You can request access to the Spotify secret from the owner of the Web API (Pavan Hirpara).
 
 ### Running the frontend
 
