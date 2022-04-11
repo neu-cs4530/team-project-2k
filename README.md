@@ -16,6 +16,10 @@ The frontend implements video chat using the [Twilio Programmable Video](https:/
 
 A backend service (in the `services/townService` directory) implements the application logic: tracking which "towns" are available to be joined, and the state of each of those towns.
 
+## Running this app via Netlify
+
+We have set up Netlify deploys for our repo. Thus, after every commit, a new Netlify page is deployed that can be used for remote access to the Covey Town app. In order for the page to work correctly with the Spotify API, we must add the Netlify URL to the list of trusted URLs that the Spotify API can redirect to. To request that a new Netlify deploy URL be added to this list, contact the owner of the Spotify Web app (Pavan Hirpara)
+
 ## Running this app locally
 
 Running the application locally entails running both the backend service and a frontend.
