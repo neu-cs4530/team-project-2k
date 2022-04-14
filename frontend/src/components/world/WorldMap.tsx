@@ -205,29 +205,36 @@ class CoveyGameScene extends Phaser.Scene {
         if (myPlayer) {
           this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
         }
-        let userText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
+        let spotifyUsernameText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
         let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
         let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
         if (this.spotifyData !== undefined) {
-          userText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
+          spotifyUsernameText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
             font: '18px monospace',
             color: '#191414',
             backgroundColor: '#1DB954',
-          });
+          })
+          .setInteractive()
+          .on('pointerdown', () => { window.open('https://www.google.com/') });
+
           playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
             font: '18px monospace',
             color: '#191414',
             backgroundColor: '#1DB954',
-          });
+          })
+          .setInteractive()
+          .on('pointerdown', () => { window.open('https://www.youtube.com/') });
           currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
             font: '18px monospace',
             color: '#191414',
             backgroundColor: '#1DB954',
-          });
+          })
+          .setInteractive()
+          .on('pointerdown', () => { window.open('https://www.spotify.com/') });
         }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
-        myPlayer.spotifyUsernameText = userText
+        myPlayer.spotifyUsernameText = spotifyUsernameText;
         myPlayer.playlistText = playlistText;
         myPlayer.currentSongText = currentSongText;
       }
@@ -530,17 +537,23 @@ class CoveyGameScene extends Phaser.Scene {
         font: '18px monospace',
         color: '#191414',
         backgroundColor: '#1DB954',
-      });
+      })
+      .setInteractive()
+      .on('pointerdown', () => { window.open('https://www.google.com/') });
       playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
         font: '18px monospace',
         color: '#191414',
         backgroundColor: '#1DB954',
-      });
+      })
+      .setInteractive()
+      .on('pointerdown', () => { window.open('https://www.youtube.com/') });
       currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
         font: '18px monospace',
         color: '#191414',
         backgroundColor: '#1DB954',
-      });
+      })
+      .setInteractive()
+      .on('pointerdown', () => { window.open('https://www.spotify.com/') });
     }
     this.player = {
       sprite,
