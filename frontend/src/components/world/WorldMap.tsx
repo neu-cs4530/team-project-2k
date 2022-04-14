@@ -152,7 +152,14 @@ class CoveyGameScene extends Phaser.Scene {
     }
     players.forEach(p => {
       this.updatePlayerLocation(p);
-      this.spotifyData = { currentSong : p.currentSong || "None", selectedPlaylist : p.selectedPlaylist || "None", spotifyUsername : p.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: p.currentSong || "None",
+        currentSongHref: p.currentSongHref || '',
+        selectedPlaylist: p.selectedPlaylist || "None",
+        selectedPlaylistHref: p.selectedPlaylistHref || '',
+        spotifyUsername : p.spotifyUsername || "None",
+        spotifyUsernameHref: p.spotifyUsernameHref || '',
+      };
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -184,9 +191,16 @@ class CoveyGameScene extends Phaser.Scene {
           y: 0,
         };
       }
-      myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.selectedPlaylist, player.spotifyUsername);
+      myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.currentSongHref, player.selectedPlaylist, player.selectedPlaylistHref, player.spotifyUsername, player.spotifyUsernameHref);
       this.players.push(myPlayer);
-      this.spotifyData = { currentSong : player.currentSong || "None", selectedPlaylist : player.selectedPlaylist || "None", spotifyUsername : player.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: player.currentSong || "None",
+        currentSongHref: player.currentSongHref || '',
+        selectedPlaylist: player.selectedPlaylist || "None",
+        selectedPlaylistHref: player.selectedPlaylistHref || '',
+        spotifyUsername : player.spotifyUsername || "None",
+        spotifyUsernameHref: player.spotifyUsernameHref || '',
+      };
     }
     if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
       let { sprite } = myPlayer;
@@ -203,7 +217,14 @@ class CoveyGameScene extends Phaser.Scene {
           backgroundColor: '#1DB954',
         });
         if (myPlayer) {
-          this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+          this.spotifyData = {
+            currentSong: myPlayer.currentSong || "None",
+            currentSongHref: myPlayer.currentSongHref || '',
+            selectedPlaylist: myPlayer.selectedPlaylist || "None",
+            selectedPlaylistHref: myPlayer.selectedPlaylistHref || '',
+            spotifyUsername : myPlayer.spotifyUsername || "None",
+            spotifyUsernameHref: myPlayer.spotifyUsernameHref || '',
+          };
         }
         let spotifyUsernameText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
         let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
@@ -215,7 +236,9 @@ class CoveyGameScene extends Phaser.Scene {
             backgroundColor: '#1DB954',
           })
           .setInteractive()
-          .on('pointerdown', () => { window.open('https://www.google.com/') });
+          .on('pointerdown', () => { if (this.spotifyData?.spotifyUsernameHref !== '') { 
+            window.open(this.spotifyData?.spotifyUsernameHref)
+          }});
 
           playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
             font: '18px monospace',
@@ -223,14 +246,19 @@ class CoveyGameScene extends Phaser.Scene {
             backgroundColor: '#1DB954',
           })
           .setInteractive()
-          .on('pointerdown', () => { window.open('https://www.youtube.com/') });
+          .on('pointerdown', () => { if (this.spotifyData?.selectedPlaylistHref !== '') {
+            window.open(this.spotifyData?.selectedPlaylistHref)
+          }});
+
           currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
             font: '18px monospace',
             color: '#191414',
             backgroundColor: '#1DB954',
           })
           .setInteractive()
-          .on('pointerdown', () => { window.open('https://www.spotify.com/') });
+          .on('pointerdown', () => { if (this.spotifyData?.currentSongHref !== '') {
+            window.open(this.spotifyData?.currentSongHref)
+          }});
         }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
@@ -530,7 +558,14 @@ class CoveyGameScene extends Phaser.Scene {
     let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
     const myPlayer = this.players.find(player => player.id === this.myPlayerID);
     if (myPlayer) {
-      this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: myPlayer.currentSong || "None",
+        currentSongHref: myPlayer.currentSongHref || '',
+        selectedPlaylist: myPlayer.selectedPlaylist || "None",
+        selectedPlaylistHref: myPlayer.selectedPlaylistHref || '',
+        spotifyUsername : myPlayer.spotifyUsername || "None",
+        spotifyUsernameHref: myPlayer.spotifyUsernameHref || '',
+      };
     }
     if (this.spotifyData !== undefined) {
       spotifyUsernameText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
@@ -539,21 +574,29 @@ class CoveyGameScene extends Phaser.Scene {
         backgroundColor: '#1DB954',
       })
       .setInteractive()
-      .on('pointerdown', () => { window.open('https://www.google.com/') });
+      .on('pointerdown', () => { if (this.spotifyData?.spotifyUsername !== '') {
+        window.open(myPlayer?.spotifyUsernameHref)
+      }});
+
       playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
         font: '18px monospace',
         color: '#191414',
         backgroundColor: '#1DB954',
       })
       .setInteractive()
-      .on('pointerdown', () => { window.open('https://www.youtube.com/') });
+      .on('pointerdown', () => { if (this.spotifyData?.selectedPlaylistHref !== '') {
+        window.open(myPlayer?.selectedPlaylistHref)
+      }});
+
       currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
         font: '18px monospace',
         color: '#191414',
         backgroundColor: '#1DB954',
       })
       .setInteractive()
-      .on('pointerdown', () => { window.open('https://www.spotify.com/') });
+      .on('pointerdown', () => { if (this.spotifyData?.currentSongHref !== '') {
+        window.open(myPlayer?.currentSongHref)
+      }});
     }
     this.player = {
       sprite,
