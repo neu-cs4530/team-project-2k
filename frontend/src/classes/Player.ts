@@ -9,7 +9,11 @@ export default class Player {
 
   public label?: Phaser.GameObjects.Text;
 
-  public textbox?: Phaser.GameObjects.Text;
+  public spotifyUsernameText?: Phaser.GameObjects.Text;
+
+  public playlistText?: Phaser.GameObjects.Text;
+
+  public currentSongText?: Phaser.GameObjects.Text;
   
   private readonly _currentSong: string;
 

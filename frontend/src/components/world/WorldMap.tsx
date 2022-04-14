@@ -27,7 +27,9 @@ class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     label: Phaser.GameObjects.Text;
-    textbox: Phaser.GameObjects.Text;
+    spotifyUsernameText: Phaser.GameObjects.Text;
+    playlistText: Phaser.GameObjects.Text;
+    currentSongText: Phaser.GameObjects.Text;
   };
 
   private myPlayerID: string;
@@ -197,32 +199,50 @@ class CoveyGameScene extends Phaser.Scene {
           .setOffset(0, 24);
         const label = this.add.text(0, 0, myPlayer.userName, {
           font: '18px monospace',
-          color: '#000000',
-          backgroundColor: '#ffffff',
+          color: '#191414',
+          backgroundColor: '#1DB954',
         });
         if (myPlayer) {
           this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
         }
-        let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+        let userText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
+        let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
+        let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
         if (this.spotifyData !== undefined) {
-          textbox = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+          userText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
             font: '18px monospace',
-            color: '#000000',
-            // padding: {x: 20, y: 10},
-            backgroundColor: '#ffffff',
+            color: '#191414',
+            backgroundColor: '#1DB954',
+          });
+          playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
+            font: '18px monospace',
+            color: '#191414',
+            backgroundColor: '#1DB954',
+          });
+          currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
+            font: '18px monospace',
+            color: '#191414',
+            backgroundColor: '#1DB954',
           });
         }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
-        myPlayer.textbox = textbox;
+        myPlayer.spotifyUsernameText = userText
+        myPlayer.playlistText = playlistText;
+        myPlayer.currentSongText = currentSongText;
       }
       if (!sprite.anims) return;
       sprite.setX(player.location.x);
       sprite.setY(player.location.y);
       myPlayer.label?.setX(player.location.x - myPlayer.label.frame.centerX / 2);
       myPlayer.label?.setY(player.location.y - 20);
-      myPlayer.textbox?.setX(player.location.x - myPlayer.textbox.frame.centerX / 2);
-      myPlayer.textbox?.setY(player.location.y - 80);
+      myPlayer.spotifyUsernameText?.setX(player.location.x - myPlayer.spotifyUsernameText.frame.centerX / 2);
+      myPlayer.spotifyUsernameText?.setY(player.location.y - 40);
+      myPlayer.playlistText?.setX(player.location.x - myPlayer.playlistText.frame.centerX / 2);
+      myPlayer.playlistText?.setY(player.location.y - 60);
+      myPlayer.currentSongText?.setX(player.location.x - myPlayer.currentSongText.frame.centerX / 2);
+      myPlayer.currentSongText?.setY(player.location.y - 80);
+
       if (player.location.moving) {
         sprite.anims.play(`misa-${player.location.rotation}-walk`, true);
       } else {
@@ -299,8 +319,12 @@ class CoveyGameScene extends Phaser.Scene {
       const isMoving = primaryDirection !== undefined;
       this.player.label.setX(body.x - this.player.label.frame.centerX / 2);
       this.player.label.setY(body.y - 20);
-      this.player.textbox.setX(body.x - this.player.textbox.frame.centerX / 2);
-      this.player.textbox.setY(body.y - 80);
+      this.player.spotifyUsernameText?.setX(body.x - this.player.spotifyUsernameText.frame.centerX / 2);
+      this.player.spotifyUsernameText?.setY(body.y - 40);
+      this.player.playlistText?.setX(body.x - this.player.playlistText.frame.centerX / 2);
+      this.player.playlistText?.setY(body.y - 60);
+      this.player.currentSongText?.setX(body.x - this.player.currentSongText.frame.centerX / 2);
+      this.player.currentSongText?.setY(body.y - 80);
       if (
         !this.lastLocation ||
         this.lastLocation.x !== body.x ||
@@ -491,27 +515,39 @@ class CoveyGameScene extends Phaser.Scene {
       .setOffset(0, 24);
     const label = this.add.text(spawnPoint.x, spawnPoint.y - 20, '(You)', {
       font: '18px monospace',
-      color: '#000000',
-      // padding: {x: 20, y: 10},
-      backgroundColor: '#ffffff',
+      color: '#191414',
+      backgroundColor: '#1DB954',
     });
-    let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+    let spotifyUsernameText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
+    let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
+    let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
     const myPlayer = this.players.find(player => player.id === this.myPlayerID);
     if (myPlayer) {
       this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
     }
     if (this.spotifyData !== undefined) {
-      textbox = this.add.text(spawnPoint.x, spawnPoint.y, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+      spotifyUsernameText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
         font: '18px monospace',
-        color: '#000000',
-        // padding: {x: 20, y: 10},
-        backgroundColor: '#ffffff',
+        color: '#191414',
+        backgroundColor: '#1DB954',
+      });
+      playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
+        font: '18px monospace',
+        color: '#191414',
+        backgroundColor: '#1DB954',
+      });
+      currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
+        font: '18px monospace',
+        color: '#191414',
+        backgroundColor: '#1DB954',
       });
     }
     this.player = {
       sprite,
       label,
-      textbox,
+      spotifyUsernameText,
+      playlistText,
+      currentSongText,
     };
     
 
