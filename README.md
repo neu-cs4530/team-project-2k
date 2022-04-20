@@ -53,7 +53,7 @@ The backend will automatically restart if you change any of the files in the `se
 
 Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWNS_SERVICE_URL=http://localhost:8081` (if you deploy the towns service to another location, put that location here instead)
 
-You will also need to add the line: `SPOTIFY_CLIENT_SECRET=<secret>`. `The SPOTIFY_CLIENT_SECRET` is a unique secret to our Spotify Web API app and must be included to gain access to the Spotify API. You can request access to the Spotify secret from the owner of the Web API (Pavan Hirpara).
+You will also need to add the line: `SPOTIFY_CLIENT_SECRET=<secret>`. `The SPOTIFY_CLIENT_SECRET` is a unique secret to our Spotify Web API app and must be included to gain access to the Spotify API. You can request access to the Spotify secret from the owner of the Web API (Pavan Hirpara hirpara.p@northeastern.edu).
 
 ### Running the frontend
 
