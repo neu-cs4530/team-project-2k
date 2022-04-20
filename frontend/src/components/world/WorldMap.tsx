@@ -269,13 +269,13 @@ class CoveyGameScene extends Phaser.Scene {
       if (!sprite.anims) return;
       sprite.setX(player.location.x);
       sprite.setY(player.location.y);
-      myPlayer.label?.setX(player.location.x - myPlayer.label.frame.centerX / 2);
+      myPlayer.label?.setX(player.location.x - 20);
       myPlayer.label?.setY(player.location.y - 20);
-      myPlayer.spotifyUsernameText?.setX(player.location.x - myPlayer.spotifyUsernameText.frame.centerX / 2);
+      myPlayer.spotifyUsernameText?.setX(player.location.x - 20);
       myPlayer.spotifyUsernameText?.setY(player.location.y - 40);
-      myPlayer.playlistText?.setX(player.location.x - myPlayer.playlistText.frame.centerX / 2);
+      myPlayer.playlistText?.setX(player.location.x - 20);
       myPlayer.playlistText?.setY(player.location.y - 60);
-      myPlayer.currentSongText?.setX(player.location.x - myPlayer.currentSongText.frame.centerX / 2);
+      myPlayer.currentSongText?.setX(player.location.x - 20);
       myPlayer.currentSongText?.setY(player.location.y - 80);
 
       if (player.location.moving) {
@@ -352,13 +352,13 @@ class CoveyGameScene extends Phaser.Scene {
       this.player.sprite.body.velocity.normalize().scale(speed);
 
       const isMoving = primaryDirection !== undefined;
-      this.player.label.setX(body.x - this.player.label.frame.centerX / 2);
+      this.player.label.setX(body.x - 20);
       this.player.label.setY(body.y - 20);
-      this.player.spotifyUsernameText?.setX(body.x - this.player.spotifyUsernameText.frame.centerX / 2);
+      this.player.spotifyUsernameText?.setX(body.x - 20);
       this.player.spotifyUsernameText?.setY(body.y - 40);
-      this.player.playlistText?.setX(body.x - this.player.playlistText.frame.centerX / 2);
+      this.player.playlistText?.setX(body.x - 20);
       this.player.playlistText?.setY(body.y - 60);
-      this.player.currentSongText?.setX(body.x - this.player.currentSongText.frame.centerX / 2);
+      this.player.currentSongText?.setX(body.x - 20);
       this.player.currentSongText?.setY(body.y - 80);
       if (
         !this.lastLocation ||
