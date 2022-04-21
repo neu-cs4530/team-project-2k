@@ -1,4 +1,4 @@
-import Player from '../types/Player';
+import Player from './Player';
 
 
 describe('Player', () => {
@@ -10,7 +10,7 @@ describe('Player', () => {
     expect(testPlayer.currentSong).toBe(undefined);
     expect(testPlayer.selectedPlaylist).toBe(undefined);
     expect(testPlayer.spotifyUsername).toBe(undefined);
-  })
+  });
   it('should set fields with appropriate values via setter functions', () => {
     const testPlayer = new Player('test');
     testPlayer.currentSong = 'This World is On Fire By Alicia KEYS';
@@ -19,5 +19,5 @@ describe('Player', () => {
     expect(testPlayer.selectedPlaylist).toBe('test - Pavan');
     testPlayer.spotifyUsername = 'spotted flamingo 2'
     expect(testPlayer.spotifyUsername).toBe('spotted flamingo 2');
-  })
-})
+  });
+});
