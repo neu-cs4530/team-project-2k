@@ -66,12 +66,14 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
   const accessToken = window.location.hash !== '' ? getAccessToken(window.location.hash) : null;
 
   const [spotifyUsername, setSpotifyUsername] = useState('');
+  const [spotifyProfilePic, setSpotifyProfilePic] = useState('');
   
   const getSpotifyUsername = useCallback(async () => {
     if (accessToken) {
       spotifyWebApi.setAccessToken(accessToken);
       const result = await spotifyWebApi.users.getMe()
       setSpotifyUsername(result.id);
+      setSpotifyProfilePic(result.images[0].url);
     }
   }, [accessToken, spotifyWebApi]);
 
@@ -181,7 +183,10 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
           <Box p="4" borderWidth="1px" borderRadius="lg">
             <Heading as="h2" size="lg">Connect to a Spotify Account</Heading>
             {accessToken ? 
-              <Box>Connected to Spotify Account: {spotifyUsername}</Box> : 
+              <Box>
+                <Box>Connected to Spotify Account: {spotifyUsername}</Box>
+                <img src={spotifyProfilePic} alt="Profile Pic" width="100" height="100"/>
+              </Box> : 
               <Link href={spotifyAuthURL}>
                 <Button data-testid="spotifyLoginButton">Login to Spotify Account</Button>
               </Link>}
