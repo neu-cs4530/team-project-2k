@@ -169,6 +169,9 @@ class CoveyGameScene extends Phaser.Scene {
       if (disconnectedPlayer.sprite) {
         disconnectedPlayer.sprite.destroy();
         disconnectedPlayer.label?.destroy();
+        disconnectedPlayer.spotifyUsernameText?.destroy();
+        disconnectedPlayer.playlistText?.destroy();
+        disconnectedPlayer.currentSongText?.destroy();
       }
     });
     // Remove disconnected players from list
