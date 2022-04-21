@@ -17,7 +17,7 @@ describe('Player', () => {
     expect(testPlayer.currentSong).toBe('This World is On Fire By Alicia KEYS');
     testPlayer.selectedPlaylist = 'test - Pavan';
     expect(testPlayer.selectedPlaylist).toBe('test - Pavan');
-    testPlayer.spotifyUsername = 'spotted flamingo 2'
+    testPlayer.spotifyUsername = 'spotted flamingo 2';
     expect(testPlayer.spotifyUsername).toBe('spotted flamingo 2');
   });
 });
