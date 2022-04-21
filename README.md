@@ -18,7 +18,7 @@ A backend service (in the `services/townService` directory) implements the appli
 
 ## Running this app via Netlify
 
-We have set up Netlify deploys for our repo. Thus, after every commit, a new Netlify page is deployed that can be used for remote access to the Covey Town app. In order for the page to work correctly with the Spotify API, we must add the Netlify URL to the list of trusted URLs that the Spotify API can redirect to. To request that a new Netlify deploy URL be added to this list, contact the owner of the Spotify Web app (Pavan Hirpara)
+We have set up Netlify deploys for our repo. Thus, a Netlify page can be used for remote access to the Covey Town app. In order for the page to work correctly with the Spotify API, we must add the Netlify URL to the list of trusted URLs that the Spotify API can redirect to. To request that a new Netlify deploy URL be added to this list, contact the owner of the Spotify Web app (Pavan Hirpara)
 
 ## Running this app locally
 
