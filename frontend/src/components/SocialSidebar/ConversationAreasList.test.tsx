@@ -131,7 +131,7 @@ describe('ConversationAreasList', () => {
               rotation: 'front',
               moving: false,
             },
-            '','',''
+            '','','', '', '', ''
           ),
         );
       }

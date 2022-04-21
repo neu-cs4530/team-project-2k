@@ -19,11 +19,20 @@ export default class Player {
   /** The player's currently playing song, which is not guaranteed to exist * */
   private _currentSong?: string;
 
+  /** The url of the player's currently playing song, which is not guaranteed to exist * */
+  private _currentSongHref?: string;
+
   /** The player's selected playlist, which is not guaranteed to exist * */
   private _selectedPlaylist?: string;
 
-  /** The player's spotify username, wihch only exists if player -> associated with spotify * */
+  /** The url of the player's selected playlist, which is not guaranteed to exist * */
+  private _selectedPlaylistHref?: string;
+
+  /** The player's Spotify username, which only exists if player -> associated with spotify * */
   private _spotifyUsername?: string;
+
+  /** The url of the player's Spotify user profileg, which is not guaranteed to exist * */
+  private _spotifyUsernameHref?: string;
 
   /** The current ConversationArea that the player is in, or undefined if they are not located within one */
   private _activeConversationArea?: ServerConversationArea;
@@ -62,11 +71,15 @@ export default class Player {
 
       if (typeof currentlyPlaying !== 'string') {
         this.currentSong = currentlyPlaying.item?.name;
+        this.currentSongHref = currentlyPlaying.item?.external_urls?.spotify;
       } else {
         this.currentSong = undefined;
+        this.currentSongHref = undefined;
       }
       this.spotifyUsername = userData.id;
+      this.spotifyUsernameHref = userData.external_urls?.spotify;
       this.selectedPlaylist = playListData.items[0].name;
+      this.selectedPlaylistHref = playListData.items[0].external_urls?.spotify;
     }
   }
 
@@ -86,6 +99,14 @@ export default class Player {
     this._currentSong = song;
   }
 
+  get currentSongHref(): string | undefined {
+    return this._currentSongHref;
+  }
+
+  set currentSongHref(songHref: string | undefined) {
+    this._currentSongHref = songHref;
+  }
+
   get selectedPlaylist(): string | undefined {
     return this._selectedPlaylist;
   }
@@ -94,12 +115,28 @@ export default class Player {
     this._selectedPlaylist = selectedPlaylist;
   }
 
+  get selectedPlaylistHref(): string | undefined {
+    return this._selectedPlaylistHref;
+  }
+
+  set selectedPlaylistHref(selectedPlaylistHref: string | undefined) {
+    this._selectedPlaylistHref = selectedPlaylistHref;
+  }
+
   get spotifyUsername(): string | undefined {
     return this._spotifyUsername;
   }
 
   set spotifyUsername(userName: string | undefined) {
     this._spotifyUsername = userName;
+  }
+
+  get spotifyUsernameHref(): string | undefined {
+    return this._spotifyUsernameHref;
+  }
+
+  set spotifyUsernameHref(userNameHref: string | undefined) {
+    this._spotifyUsernameHref = userNameHref;
   }
 
   get activeConversationArea(): ServerConversationArea | undefined {

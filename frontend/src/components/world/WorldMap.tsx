@@ -27,7 +27,9 @@ class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
     label: Phaser.GameObjects.Text;
-    textbox: Phaser.GameObjects.Text;
+    spotifyUsernameText: Phaser.GameObjects.Text;
+    playlistText: Phaser.GameObjects.Text;
+    currentSongText: Phaser.GameObjects.Text;
   };
 
   private myPlayerID: string;
@@ -150,7 +152,14 @@ class CoveyGameScene extends Phaser.Scene {
     }
     players.forEach(p => {
       this.updatePlayerLocation(p);
-      this.spotifyData = { currentSong : p.currentSong || "None", selectedPlaylist : p.selectedPlaylist || "None", spotifyUsername : p.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: p.currentSong || "None",
+        currentSongHref: p.currentSongHref || '',
+        selectedPlaylist: p.selectedPlaylist || "None",
+        selectedPlaylistHref: p.selectedPlaylistHref || '',
+        spotifyUsername : p.spotifyUsername || "None",
+        spotifyUsernameHref: p.spotifyUsernameHref || '',
+      };
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -182,9 +191,16 @@ class CoveyGameScene extends Phaser.Scene {
           y: 0,
         };
       }
-      myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.selectedPlaylist, player.spotifyUsername);
+      myPlayer = new Player(player.id, player.userName, location, player.currentSong, player.currentSongHref, player.selectedPlaylist, player.selectedPlaylistHref, player.spotifyUsername, player.spotifyUsernameHref);
       this.players.push(myPlayer);
-      this.spotifyData = { currentSong : player.currentSong || "None", selectedPlaylist : player.selectedPlaylist || "None", spotifyUsername : player.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: player.currentSong || "None",
+        currentSongHref: player.currentSongHref || '',
+        selectedPlaylist: player.selectedPlaylist || "None",
+        selectedPlaylistHref: player.selectedPlaylistHref || '',
+        spotifyUsername : player.spotifyUsername || "None",
+        spotifyUsernameHref: player.spotifyUsernameHref || '',
+      };
     }
     if (this.myPlayerID !== myPlayer.id && this.physics && player.location) {
       let { sprite } = myPlayer;
@@ -197,32 +213,71 @@ class CoveyGameScene extends Phaser.Scene {
           .setOffset(0, 24);
         const label = this.add.text(0, 0, myPlayer.userName, {
           font: '18px monospace',
-          color: '#000000',
-          backgroundColor: '#ffffff',
+          color: '#191414',
+          backgroundColor: '#1DB954',
         });
         if (myPlayer) {
-          this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+          this.spotifyData = {
+            currentSong: myPlayer.currentSong || "None",
+            currentSongHref: myPlayer.currentSongHref || '',
+            selectedPlaylist: myPlayer.selectedPlaylist || "None",
+            selectedPlaylistHref: myPlayer.selectedPlaylistHref || '',
+            spotifyUsername : myPlayer.spotifyUsername || "None",
+            spotifyUsernameHref: myPlayer.spotifyUsernameHref || '',
+          };
         }
-        let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+        let spotifyUsernameText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
+        let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
+        let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
         if (this.spotifyData !== undefined) {
-          textbox = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+          spotifyUsernameText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
             font: '18px monospace',
-            color: '#000000',
-            // padding: {x: 20, y: 10},
-            backgroundColor: '#ffffff',
-          });
+            color: '#191414',
+            backgroundColor: '#1DB954',
+          })
+          .setInteractive()
+          .on('pointerdown', () => { if (this.spotifyData?.spotifyUsernameHref !== '') { 
+            window.open(this.spotifyData?.spotifyUsernameHref)
+          }});
+
+          playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
+            font: '18px monospace',
+            color: '#191414',
+            backgroundColor: '#1DB954',
+          })
+          .setInteractive()
+          .on('pointerdown', () => { if (this.spotifyData?.selectedPlaylistHref !== '') {
+            window.open(this.spotifyData?.selectedPlaylistHref)
+          }});
+
+          currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
+            font: '18px monospace',
+            color: '#191414',
+            backgroundColor: '#1DB954',
+          })
+          .setInteractive()
+          .on('pointerdown', () => { if (this.spotifyData?.currentSongHref !== '') {
+            window.open(this.spotifyData?.currentSongHref)
+          }});
         }
         myPlayer.label = label;
         myPlayer.sprite = sprite;
-        myPlayer.textbox = textbox;
+        myPlayer.spotifyUsernameText = spotifyUsernameText;
+        myPlayer.playlistText = playlistText;
+        myPlayer.currentSongText = currentSongText;
       }
       if (!sprite.anims) return;
       sprite.setX(player.location.x);
       sprite.setY(player.location.y);
-      myPlayer.label?.setX(player.location.x - myPlayer.label.frame.centerX / 2);
+      myPlayer.label?.setX(player.location.x - 20);
       myPlayer.label?.setY(player.location.y - 20);
-      myPlayer.textbox?.setX(player.location.x - myPlayer.textbox.frame.centerX / 2);
-      myPlayer.textbox?.setY(player.location.y - 80);
+      myPlayer.spotifyUsernameText?.setX(player.location.x - 20);
+      myPlayer.spotifyUsernameText?.setY(player.location.y - 40);
+      myPlayer.playlistText?.setX(player.location.x - 20);
+      myPlayer.playlistText?.setY(player.location.y - 60);
+      myPlayer.currentSongText?.setX(player.location.x - 20);
+      myPlayer.currentSongText?.setY(player.location.y - 80);
+
       if (player.location.moving) {
         sprite.anims.play(`misa-${player.location.rotation}-walk`, true);
       } else {
@@ -297,10 +352,14 @@ class CoveyGameScene extends Phaser.Scene {
       this.player.sprite.body.velocity.normalize().scale(speed);
 
       const isMoving = primaryDirection !== undefined;
-      this.player.label.setX(body.x - this.player.label.frame.centerX / 2);
+      this.player.label.setX(body.x - 20);
       this.player.label.setY(body.y - 20);
-      this.player.textbox.setX(body.x - this.player.textbox.frame.centerX / 2);
-      this.player.textbox.setY(body.y - 80);
+      this.player.spotifyUsernameText?.setX(body.x - 20);
+      this.player.spotifyUsernameText?.setY(body.y - 40);
+      this.player.playlistText?.setX(body.x - 20);
+      this.player.playlistText?.setY(body.y - 60);
+      this.player.currentSongText?.setX(body.x - 20);
+      this.player.currentSongText?.setY(body.y - 80);
       if (
         !this.lastLocation ||
         this.lastLocation.x !== body.x ||
@@ -491,27 +550,60 @@ class CoveyGameScene extends Phaser.Scene {
       .setOffset(0, 24);
     const label = this.add.text(spawnPoint.x, spawnPoint.y - 20, '(You)', {
       font: '18px monospace',
-      color: '#000000',
-      // padding: {x: 20, y: 10},
-      backgroundColor: '#ffffff',
+      color: '#191414',
+      backgroundColor: '#1DB954',
     });
-    let textbox = this.add.text(0, 0, 'Spotify', { font: '"18px monospace"' });
+    let spotifyUsernameText = this.add.text(0, 0, 'Username', { font: '"18px monospace"' });
+    let playlistText = this.add.text(0, 0, 'Playlist', { font: '"18px monospace"' });
+    let currentSongText = this.add.text(0, 0, 'Current Song', { font: '"18px monospace"' });
     const myPlayer = this.players.find(player => player.id === this.myPlayerID);
     if (myPlayer) {
-      this.spotifyData = { currentSong : myPlayer.currentSong || "None", selectedPlaylist : myPlayer.selectedPlaylist || "None", spotifyUsername : myPlayer.spotifyUsername || "None" };
+      this.spotifyData = {
+        currentSong: myPlayer.currentSong || "None",
+        currentSongHref: myPlayer.currentSongHref || '',
+        selectedPlaylist: myPlayer.selectedPlaylist || "None",
+        selectedPlaylistHref: myPlayer.selectedPlaylistHref || '',
+        spotifyUsername : myPlayer.spotifyUsername || "None",
+        spotifyUsernameHref: myPlayer.spotifyUsernameHref || '',
+      };
     }
     if (this.spotifyData !== undefined) {
-      textbox = this.add.text(spawnPoint.x, spawnPoint.y, `Current Song: ${this.spotifyData.currentSong}\nPlaylist: ${this.spotifyData.selectedPlaylist}\nUsername: ${this.spotifyData.spotifyUsername}`, {
+      spotifyUsernameText = this.add.text(0, 0, `Username: ${this.spotifyData.spotifyUsername}`, {
         font: '18px monospace',
-        color: '#000000',
-        // padding: {x: 20, y: 10},
-        backgroundColor: '#ffffff',
-      });
+        color: '#191414',
+        backgroundColor: '#1DB954',
+      })
+      .setInteractive()
+      .on('pointerdown', () => { if (this.spotifyData?.spotifyUsername !== '') {
+        window.open(myPlayer?.spotifyUsernameHref)
+      }});
+
+      playlistText = this.add.text(0, 0, `Playlist: ${this.spotifyData.selectedPlaylist}`, {
+        font: '18px monospace',
+        color: '#191414',
+        backgroundColor: '#1DB954',
+      })
+      .setInteractive()
+      .on('pointerdown', () => { if (this.spotifyData?.selectedPlaylistHref !== '') {
+        window.open(myPlayer?.selectedPlaylistHref)
+      }});
+
+      currentSongText = this.add.text(0, 0, `Current Song: ${this.spotifyData.currentSong}`, {
+        font: '18px monospace',
+        color: '#191414',
+        backgroundColor: '#1DB954',
+      })
+      .setInteractive()
+      .on('pointerdown', () => { if (this.spotifyData?.currentSongHref !== '') {
+        window.open(myPlayer?.currentSongHref)
+      }});
     }
     this.player = {
       sprite,
       label,
-      textbox,
+      spotifyUsernameText,
+      playlistText,
+      currentSongText,
     };
     
 
