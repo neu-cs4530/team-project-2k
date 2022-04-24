@@ -139,6 +139,14 @@ export default class Player {
     this._spotifyUsernameHref = userNameHref;
   }
 
+  get spotifyApi(): SpotifyWebApi | null {
+    return this._spotifyApi;
+  }
+
+  set spotifyApi(spotifyApi: SpotifyWebApi | null) {
+    this.spotifyApi = spotifyApi;
+  }
+
   get activeConversationArea(): ServerConversationArea | undefined {
     return this._activeConversationArea;
   }
