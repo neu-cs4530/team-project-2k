@@ -1,4 +1,4 @@
-# Covey.Town
+# Covey.Town (feat. Spotify)
 
 https://covey-spotify.herokuapp.com/
 
@@ -15,6 +15,12 @@ The frontend client (in the `frontend` directory of this repository) uses the [P
 The frontend implements video chat using the [Twilio Programmable Video](https://www.twilio.com/docs/video) API, and that aspect of the interface relies heavily on [Twilio's React Starter App](https://github.com/twilio/twilio-video-app-react). Twilio's React Starter App is packaged and reused under the Apache License, 2.0.
 
 A backend service (in the `services/townService` directory) implements the application logic: tracking which "towns" are available to be joined, and the state of each of those towns.
+
+The manner in which we have connected Covey.Town to Spotify is described below.
+In the login page, a registered user may click on an embedded link to a Spotify login page and login. Upon successful login, an authorization token is generated and the user is redirected to Covey.Town where the token is scraped from the URL. Once the player goes about normally and joins a town, this code is stored with that user's backend player object ('services/townService/src/types/Player.ts').
+Using the access token, the player makes calls to the Spotify API and populates the necessary fields for our feature.
+
+The frontend player (in 'frontend/src/classes/Player.ts') contains a spotifyData type to package those fields for rendering in the WorldMap and SocialSidebar.
 
 ## Running this app via Netlify
 
